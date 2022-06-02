@@ -672,15 +672,17 @@ class TableBase(MutableMapping):
             tmp = {}
             buckets = []
             self.decode_c_struct(tmp, buckets, bucket_fn, bucket_sort_fn)
-
             for bucket in buckets:
                 vals = tmp[bucket]
+                idle_counts = vals[0]
+                busy_counts = sum(vals[1:])
                 if section_print_fn:
                     print("\n%s = %s" % (section_header,
                         section_print_fn(bucket)))
                 else:
                     print("\n%s = %r" % (section_header, bucket))
-                _print_linear_hist(vals, val_type)
+                print(idle_counts)
+                print(busy_counts)
         else:
             vals = [0] * linear_index_max
             for k, v in self.items():
